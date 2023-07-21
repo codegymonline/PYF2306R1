@@ -60,11 +60,11 @@ class MangSinhVien:
         )
         self.danh_sach.append(sv_temp)
 
-# Demo listStudent
-dssv = MangSinhVien()
-dssv.xem_danh_sach()
-dssv.them_sinh_vien()
-dssv.xem_danh_sach()
+# # Demo listStudent
+# dssv = MangSinhVien()
+# dssv.xem_danh_sach()
+# dssv.them_sinh_vien()
+# dssv.xem_danh_sach()
 
 
 def lua_chon():
@@ -86,8 +86,16 @@ def lua_chon():
 
 # Tạo mảng danh sách sinh viên
 # main
-# dssv = []
-# while lua_chon() != 0:
-#     print("TODO")
+mang_sv = MangSinhVien()
+menu_chon = lua_chon()
+while menu_chon != 0:
+    if menu_chon == 1:
+        mang_sv.xem_danh_sach()
+    elif menu_chon == 2:
+        mang_sv.them_sinh_vien()
     
-# print("BYE BYE")
+    # Hiện menu
+    menu_chon = lua_chon()
+        
+    
+print("BYE BYE")

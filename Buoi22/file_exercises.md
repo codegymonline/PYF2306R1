@@ -39,8 +39,10 @@ with open('example.txt', 'r') as file:
 
 ## 6. Reading all lines at once using readlines
 
+```
 with open('example.txt', 'r') as file:
-print(file.readlines())
+    print(file.readlines())
+```
 
 ## 7. Looping over a file object
 

@@ -1,0 +1,16 @@
+[
+    {
+        "ma_hh": 1,
+        "ten_hh": "IPhone 14",
+        "gia_ban": 29890000,
+        "so_luong": 5,
+        "loai": "Điện thoại"
+    },
+    {
+        "ma_hh": 2,
+        "ten_hh": "IPad Pro",
+        "gia_ban": 21890000,
+        "so_luong": 15,
+        "loai": "Máy tính bảng"
+    }
+]

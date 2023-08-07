@@ -50,11 +50,19 @@ def luu_du_lieu():
     except:
         messagebox.showwarning(title="Lỗi", message="Lỗi lưu file")
 
+        
+def tim_hang_hoa_theo_ma(id):
+    """Tìm hàng hóa dựa vào mã hàng hóa, trả về hàng hóa tìm được dạng dict hoặc None."""
+    for item in mang_hang_hoa:
+        if item["ma_hh"] == id:
+            return item
+    
+    return None
+
 
 def hien_thi_danh_sach_hang_hoa():
     """Cập nhật lưới"""
     clear_tree_view(tree)
-    print('BEGIN Hiển thị', mang_hang_hoa, len(mang_hang_hoa))
     if len(mang_hang_hoa) == 0:
         doc_du_lieu()        
     for item in mang_hang_hoa:
@@ -69,24 +77,44 @@ def clear_tree_view(mytree):
 
 
 def them_hang_hoa():
+    #TODO: Check nhập liệu hợp lệ
     obj = {
-        "ma_hh": int(mahh.get()),
-        "ten_hh": tenhh.get(),
+#         "ma_hh": int(mahh.get()),
+        "ma_hh": mahh_value.get(),
+        "ten_hh": tenhh_value.get(),
         "gia_ban": int(dongia.get()),
         "so_luong": int(soluong.get()),
-        "loai": loai.get()
+        "loai": gia_tri_chon_loai.get()
     }
-    print(obj)
+    global mang_hang_hoa
     
-    # TODO: Kiểm tra xem mã hàng hóa đã có hay chưa?
+    # Kiểm tra xem mã hàng hóa đã có hay chưa?
+    hang_hoa_tim = tim_hang_hoa_theo_ma(obj['ma_hh'])
     
-    # Nếu chưa thêm ==> cập nhật treeview
-    mang_hang_hoa.append(obj)
-    
-    # Save file
-    luu_du_lieu()
-    # Cập nhật treeview
-    hien_thi_danh_sach_hang_hoa(tree)
+    if hang_hoa_tim is not None:
+        messagebox.showwarning(message=f"Đã có hàng hóa mã: {obj['ma_hh']}")
+    else:    
+        # Nếu chưa thêm ==> cập nhật treeview
+        mang_hang_hoa.append(obj)
+        # Save file
+        luu_du_lieu()
+        # Cập nhật treeview
+        hien_thi_danh_sach_hang_hoa()
+        messagebox.showinfo(message="Thêm mới thành công!")
+
+# Định nghĩa hàm xử lý sự kiện chọn và gán
+def xu_ly_chon_hang_hoa(e):
+    for i_item in tree.selection():
+        selected_item = tree.item(i_item)
+        row_value = selected_item["values"]
+        
+        # Cập nhật thông tin xuống dưới (vùng thông tin)
+        mahh_value.set(int(row_value[0]))
+        tenhh_value.set(row_value[1])
+        
+        messagebox.showinfo(message=f"{row_value[0]}, {row_value[1]}, {row_value[2]}")
+
+tree.bind('<<TreeviewSelect>>', xu_ly_chon_hang_hoa)
 
 
 # Dinh nghia widget cho list_button_frame
@@ -109,16 +137,21 @@ hien_thi_danh_sach_hang_hoa()
 
 # Thêm widget cho vùng input
 Label(input_hh_frame, text="Mã hàng hóa").grid(row=0, column=0)
-mahh = Entry(input_hh_frame)
+mahh_value = IntVar()
+mahh = Entry(input_hh_frame, textvariable=mahh_value)
 mahh.grid(row=0, column=1)
 
 Label(input_hh_frame, text="Tên hàng hóa").grid(row=1, column=0)
-tenhh = Entry(input_hh_frame)
+tenhh_value = StringVar()
+tenhh = Entry(input_hh_frame, textvariable=tenhh_value)
 tenhh.grid(row=1, column=1)
 
 Label(input_hh_frame, text="Loại").grid(row=2, column=0)
-loai = Entry(input_hh_frame)
+gia_tri_chon_loai = StringVar()
+loai = ttk.Combobox(input_hh_frame, textvariable=gia_tri_chon_loai)
 loai.grid(row=2, column=1)
+loai['values'] = ["Laptop", "Điện thoại", "Máy tính bảng", "Tivi", "Tủ lạnh"]
+
 
 Label(input_hh_frame, text="Đơn giá").grid(row=3, column=0)
 dongia = Entry(input_hh_frame)

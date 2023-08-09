@@ -1,0 +1,12 @@
+[
+    {
+        "username": "admin",
+        "password": "admin",
+        "fullname": "Quản trị Hệ thống"
+    },
+    {
+        "username": "user",
+        "password": "user",
+        "fullname": "Người dùng"
+    }
+]

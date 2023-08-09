@@ -117,12 +117,16 @@ def xu_ly_chon_hang_hoa(e):
         
 def xoa_hang_hoa(mahh):
     # 1.Tìm hàng hóa theo mahh
-    # 2. Nếu có thì
-    # 2.1 xóa khỏi mang_hang_hoa
-    # 2.2 update treeview
-    hien_thi_danh_sach_hang_hoa()
-    # 2.3 lưu xuống file
-    luu_du_lieu()
+    hang_hoa_tim_thay = tim_hang_hoa_theo_ma(mahh)
+    if hang_hoa_tim_thay is not None:
+        # 2. Nếu có thì
+        # 2.1 xóa khỏi mang_hang_hoa
+        global mang_hang_hoa
+        mang_hang_hoa.remove(hang_hoa_tim_thay)
+        # 2.2 update treeview
+        hien_thi_danh_sach_hang_hoa()
+        # 2.3 lưu xuống file
+        luu_du_lieu()
     
         
 def rightClickMenu(event):

@@ -81,8 +81,8 @@ def them_hang_hoa():
     obj = {
         "ma_hh": mahh_value.get(),
         "ten_hh": tenhh_value.get(),
-        "gia_ban": int(dongia.get()),
-        "so_luong": int(soluong.get()),
+        "gia_ban": dongia_value.get(),
+        "so_luong": so_luong_value.get(),
         "loai": gia_tri_chon_loai.get()
     }
     global mang_hang_hoa
@@ -110,10 +110,45 @@ def xu_ly_chon_hang_hoa(e):
         # Cập nhật thông tin xuống dưới (vùng thông tin)
         mahh_value.set(int(row_value[0]))
         tenhh_value.set(row_value[1])
+        dongia_value.set(row_value[2])
+        so_luong_value.set(row_value[3])
+        gia_tri_chon_loai.set(row_value[4])
+
         
-        messagebox.showinfo(message=f"{row_value[0]}, {row_value[1]}, {row_value[2]}")
+def xoa_hang_hoa(mahh):
+    # 1.Tìm hàng hóa theo mahh
+    # 2. Nếu có thì
+    # 2.1 xóa khỏi mang_hang_hoa
+    # 2.2 update treeview
+    hien_thi_danh_sach_hang_hoa()
+    # 2.3 lưu xuống file
+    luu_du_lieu()
+    
+        
+def rightClickMenu(event):
+    # create a popup menu
+    rowID = tree.identify('item', event.x, event.y)
+    if rowID:
+        tree.selection_set(rowID)
+        tree.focus_set()
+        tree.focus(rowID)
+        menu = Menu(tree, tearoff=0)
+        menu.add_command(label="Delete", command=lambda: xoa_hang_hoa(mahh_value.get()))
+        menu.add_command(label="Clear All", command= lambda: clear_tree_view(tree))
+        menu.post(event.x_root, event.y_root)
+    else:
+        pass
 
 tree.bind('<<TreeviewSelect>>', xu_ly_chon_hang_hoa)
+tree.bind('<3>', rightClickMenu)
+
+
+def xoa_thong_tin_hang_hoa():
+    mahh_value.set(0)
+    tenhh_value.set('')
+    dongia_value.set(0)
+    so_luong_value.set(0)
+    gia_tri_chon_loai.set('')
 
 
 # Dinh nghia widget cho list_button_frame
@@ -122,11 +157,11 @@ Button(list_button_frame, text="Xóa danh sách",
 ).grid(row=0, column=0, padx=5, pady=5)
 
 Button(list_button_frame, text="Cập nhật danh sách",
-       command= lambda: hien_thi_danh_sach_hang_hoa(tree)
+       command= lambda: hien_thi_danh_sach_hang_hoa()
 ).grid(row=0, column=1, padx=5, pady=5)
 
 Button(list_button_frame, text="Thêm", command=them_hang_hoa).grid(row=0, column=2, padx=5, pady=5)
-Button(list_button_frame, text="Xóa").grid(row=0, column=3, padx=5, pady=5)
+Button(list_button_frame, text="Xóa", command=xoa_thong_tin_hang_hoa).grid(row=0, column=3, padx=5, pady=5)
 Button(list_button_frame, text="Cập nhật").grid(row=0, column=4, padx=5, pady=5)
 
 # Lấy danh sách hàng hóa lúc form chạy
@@ -153,11 +188,13 @@ loai['values'] = ["Laptop", "Điện thoại", "Máy tính bảng", "Tivi", "T�
 
 
 Label(input_hh_frame, text="Đơn giá").grid(row=3, column=0)
-dongia = Entry(input_hh_frame)
+dongia_value = IntVar()
+dongia = Entry(input_hh_frame, textvariable=dongia_value)
 dongia.grid(row=3, column=1)
 
 Label(input_hh_frame, text="Số lượng").grid(row=4, column=0)
-soluong = Entry(input_hh_frame)
+so_luong_value = IntVar()
+soluong = Entry(input_hh_frame, textvariable=so_luong_value)
 soluong.grid(row=4, column=1)
 
 root.mainloop()
